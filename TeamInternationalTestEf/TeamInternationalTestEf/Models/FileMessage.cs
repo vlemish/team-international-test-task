@@ -13,7 +13,7 @@ namespace TeamInternationalTestEf.Models
         }
 
         public FileMessage(DateTime timeCreated, bool isSavedMessage, int userId, byte[] data)
-            :base(timeCreated, isSavedMessage, userId)
+            : base(timeCreated, isSavedMessage, userId)
         {
             Data = data;
         }

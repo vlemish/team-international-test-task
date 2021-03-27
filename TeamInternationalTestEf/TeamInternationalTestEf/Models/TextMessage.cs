@@ -13,7 +13,7 @@ namespace TeamInternationalTestEf.Models
         }
 
         public TextMessage(DateTime timeCreated, bool isSavedMessage, int userId, string content)
-            :base(timeCreated, isSavedMessage, userId)
+            : base(timeCreated, isSavedMessage, userId)
         {
             Content = content;
         }

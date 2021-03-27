@@ -9,20 +9,15 @@ namespace TeamInternationalTestEf.Repos
 {
     public class GenericRepo<TEntity> : IRepo<TEntity> where TEntity : class
     {
-        protected readonly TestDbContext _context;
+        protected readonly DbContext _context;
 
         private readonly DbSet<TEntity> _table;
 
 
-        public GenericRepo()
+        public GenericRepo(DbContext context)
         {
-            _context = new TestDbContext();
+            _context = context;
             _table = _context.Set<TEntity>();
-        }
-
-        public GenericRepo(DbContextOptions<TestDbContext> options)
-        {
-            _context = new TestDbContext(options);
         }
 
 
@@ -34,6 +29,17 @@ namespace TeamInternationalTestEf.Repos
             }
 
             _table.Add(entity);
+            SaveChanges();
+        }
+
+        public void AddRange(TEntity[] entities)
+        {
+            if (entities == null)
+            {
+                throw new ArgumentNullException($"Input value can't be null!");
+            }
+
+            _table.AddRange(entities);
             SaveChanges();
         }
 
@@ -64,6 +70,17 @@ namespace TeamInternationalTestEf.Repos
             SaveChanges();
         }
 
+        public void RemoveRange(TEntity[] entities)
+        {
+            if (entities == null)
+            {
+                throw new ArgumentNullException($"Input value can't be null!");
+            }
+
+            _table.RemoveRange(entities);
+            SaveChanges();
+        }
+
         public bool SaveChanges()
         {
             try
@@ -76,12 +93,7 @@ namespace TeamInternationalTestEf.Repos
                 // log exception or do other actions to handle the error...
 
                 return false;
-            }
-            finally
-            {
-                _context.Dispose();
-            }
-
+            }            
         }
 
         public void Update(TEntity entity)
@@ -97,14 +109,23 @@ namespace TeamInternationalTestEf.Repos
                 throw new NullReferenceException("There is no such entity in the DB!");
             }
 
-            _table.Update(entity);            
+            _table.Update(entity);
         }
-        
-        public virtual IRepo<TEntity> CreateMoq()
+
+        public void UpdateRange(TEntity[] entities)
         {
-            var options = new DbContextOptionsBuilder<TestDbContext>()
-                .UseInMemoryDatabase("InMemoryDb").Options;
-            return new GenericRepo<TEntity>(options);
+            if (entities == null)
+            {
+                throw new ArgumentNullException($"Input value can't be null!");
+            }
+
+            _table.UpdateRange(entities);
+            SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
         }
     }
 }

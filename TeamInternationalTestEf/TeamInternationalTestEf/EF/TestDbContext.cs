@@ -64,6 +64,7 @@ namespace TeamInternationalTestEf.EF
             {
                 e.ToTable("Users");
                 e.HasKey(p => p.Id);
+                e.HasIndex(e => e.Username).IsUnique();
 
                 e.Property(p => p.Id).ValueGeneratedOnAdd();
                 e.Property(p => p.FirstName).IsRequired().HasMaxLength(30);
