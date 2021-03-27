@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TeamInternationalTestEf.Repos
+﻿namespace TeamInternationalTestEf.Repos
 {
-    interface IRepo<T>
+    public interface IRepo<T>
     {
         public T[] GetAll();
 

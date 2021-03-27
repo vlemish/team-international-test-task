@@ -34,16 +34,6 @@ namespace TeamInternationalTestEf.EF
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<UserMessage>(e =>
-            //{
-            //    //e.HasKey(e => e.Id);
-
-            //    //e.Property(e => e.Id).ValueGeneratedOnAdd();
-            //    //e.Property(e => e.TextMessage).HasMaxLength(300).IsRequired(false);
-            //    //e.Property(e => e.File).IsRequired(false);
-            //    //e.Property(e => e.TimeCreated).IsRequired();
-            //    //e.Property(e => e.Image).IsRequired(false);
-            //});
             builder.Entity<FileMessage>(e =>
             {
                 e.ToTable("FileMessages");
@@ -53,6 +43,7 @@ namespace TeamInternationalTestEf.EF
                 e.Property(p => p.Data).HasMaxLength(300).IsRequired(true).IsUnicode();
                 e.Property(p => p.TimeCreated).IsRequired();
                 e.Property(p => p.UserId).IsRequired();
+                e.Property(p => p.IsSavedMessage).IsRequired().HasDefaultValue(false);
 
                 e.HasOne(fm => fm.User).WithMany(u => u.FileMessages).OnDelete(DeleteBehavior.Cascade).HasForeignKey(fm => fm.UserId);
             });
@@ -65,6 +56,7 @@ namespace TeamInternationalTestEf.EF
                 e.Property(p => p.Content).IsRequired();
                 e.Property(p => p.TimeCreated).IsRequired();
                 e.Property(p => p.UserId).IsRequired();
+                e.Property(p => p.IsSavedMessage).IsRequired().HasDefaultValue(false);
 
                 e.HasOne(tm => tm.User).WithMany(u => u.TextMessages).OnDelete(DeleteBehavior.Cascade).HasForeignKey(tm => tm.UserId);
             });

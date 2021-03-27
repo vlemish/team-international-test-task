@@ -20,6 +20,11 @@ namespace TeamInternationalTestEf.Repos
             _table = _context.Set<TEntity>();
         }
 
+        public GenericRepo(DbContextOptions<TestDbContext> options)
+        {
+            _context = new TestDbContext(options);
+        }
+
 
         public void Add(TEntity entity)
         {
@@ -93,6 +98,13 @@ namespace TeamInternationalTestEf.Repos
             }
 
             _table.Update(entity);            
+        }
+        
+        public virtual IRepo<TEntity> CreateMoq()
+        {
+            var options = new DbContextOptionsBuilder<TestDbContext>()
+                .UseInMemoryDatabase("InMemoryDb").Options;
+            return new GenericRepo<TEntity>(options);
         }
     }
 }
