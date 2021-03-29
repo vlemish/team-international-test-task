@@ -1,0 +1,19 @@
+    <div class="body-container">
+        <div clas="header">
+            <h1>
+                <button style="border:none; background-color: lightgray;"  (click)="onShowChange()"><fa-icon [icon]="faCaret"></fa-icon></button>
+                <b>✉️ Saved Messages ({{messagesCount}})</b>
+            </h1>
+        </div>
+        <div [class]="contentClass">
+            <!-- <div class="msg-el">
+                <app-text-message></app-text-message>
+            </div>
+            <div class="msg-el">
+                <app-file-message></app-file-message>
+            </div> -->
+            <div class="msg-el">
+                <app-img-message></app-img-message>
+            </div>        
+        </div>
+    </div>    

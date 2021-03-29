@@ -1,0 +1,21 @@
+<div class="flex-container">
+    <div class="content" (mouseover)="onImgMouseOver()" (mouseout)="onImgMouseOut()">
+        <div class="msg-body">
+            <div [class]="headerClass">
+                <div class="flex-container-right">
+                    <button style="border-color: white; background-color: black;" (click)="onDeleteClick()">
+                        <fa-icon class="detele-icon" [icon]="deleteIcon"></fa-icon>
+                    </button>
+                </div>
+            </div>
+            <img height="600" width="480" src="{{imgUrl}}">
+            <div [class]="footerClass" (mouseover)="onImgMouseOver()" (mouseout)="onImgMouseOut()">
+                <div class="flex-container-right">
+                    <p class="p-time">
+                        12:44
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

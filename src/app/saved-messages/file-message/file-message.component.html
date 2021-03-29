@@ -1,0 +1,29 @@
+<div class="flex-container">
+    <div class="content">
+        <div class="msg-header">
+            <div class="flex-container-right" (mouseover)="onShowMoreOver()" (mouseout)="onShowMoreOut()">
+                <button style="border:none; background-color: white;">
+                    <fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon>
+                </button>
+                <div [class]="dropDownClass">                  
+                    <button style="border:none; background-color: white;" (click)="onDeleteClick()">
+                        <fa-icon class="dropdown-el trash-icon" [icon]="trashIcon"></fa-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="msg-body">
+            <div class="flex-container-left-middle">
+                <button style="border:none; background-color: white; text-align: center;" (click)="onDownloadClick()">
+                    <fa-icon class="file-icon" [icon]="fileIcon"></fa-icon>
+                </button>
+            </div>
+            <div class="flex-container" style="margin-left: 20px; margin-right: 20px;">
+                <p class="file-name">superfile.txt</p>
+            </div>
+        </div>
+        <p class="p-time">
+            12:44
+        </p>
+    </div>
+</div>

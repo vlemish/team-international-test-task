@@ -1,0 +1,41 @@
+<div class="limiter" id="login-form">
+    
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <form class="login100-form validate-form flex-sb flex-w" method="post">
+                <span class="login100-form-title">
+                    Account Login
+                </span>
+
+                <span class="txt1" style="padding-bottom: 11px;">
+                    Username
+                </span>
+                <div [class]="UsernameClass"  style="margin-bottom: 36px;" data-validate="Username is required">
+                    <input class="input100" type="text" name="username"
+                    [(ngModel)]="user.username" (blur)="onUsernameBlur()">
+                    <span class="focus-input100"></span>
+                </div>
+
+                <span class="txt1" style="padding-bottom: 11px;">
+                    Password
+                </span>
+                <div [class]="PasswordClass" style="margin-bottom: 12px;" data-validate="Password is required">
+                    <span class="btn-show-pass">
+                        <fa-icon [icon]="faEye" (click)="showPassword()"></fa-icon>
+                    </span>
+                    <input class="input100" [type]="passwordType" name="pass"
+                    [(ngModel)]="user.password" (blur)="onPasswordBlur()">
+                    <span class="focus-input100"></span>
+                </div>
+                <div class="flex-sb-m" style="width: 100%; padding-bottom: 2px;">
+                </div>
+                <p style="font-weight:bold; padding-bottom: 20px;">{{ErrorMessage}}</p>
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" (click)="loginUser()">
+                        Login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
