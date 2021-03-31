@@ -12,8 +12,8 @@ namespace TeamInternationalTestEf.Models
 
         }
 
-        public TextMessage(DateTime timeCreated, bool isSavedMessage, int userId, string content)
-            : base(timeCreated, isSavedMessage, userId)
+        public TextMessage(DateTime creationTime, int userId, string content)
+            : base(creationTime, userId)
         {
             Content = content;
         }

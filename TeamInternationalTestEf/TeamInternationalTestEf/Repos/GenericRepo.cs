@@ -1,18 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using TeamInternationalTestEf.EF;
 
 namespace TeamInternationalTestEf.Repos
 {
     public class GenericRepo<TEntity> : IRepo<TEntity> where TEntity : class
     {
-        protected readonly DbContext _context;
+        protected DbContext _context;
 
-        private readonly DbSet<TEntity> _table;
+        protected DbSet<TEntity> _table;
 
+
+        public GenericRepo()
+        {
+
+        }
 
         public GenericRepo(DbContext context)
         {
@@ -21,7 +23,7 @@ namespace TeamInternationalTestEf.Repos
         }
 
 
-        public void Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
             if (entity == null)
             {
@@ -32,7 +34,7 @@ namespace TeamInternationalTestEf.Repos
             SaveChanges();
         }
 
-        public void AddRange(TEntity[] entities)
+        public virtual void AddRange(TEntity[] entities)
         {
             if (entities == null)
             {
@@ -43,24 +45,24 @@ namespace TeamInternationalTestEf.Repos
             SaveChanges();
         }
 
-        public TEntity[] GetAll()
+        public virtual TEntity[] GetAll()
         {
             return _table.Select(e => e).ToArray();
         }
 
-        public TEntity GetOneById(int id)
+        public virtual TEntity GetOneById(int id)
         {
             return _table.Find(id);
         }
 
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException($"Input value can't be null!");
             }
 
-            var dbEntity = _table.Find(entity);
+            var dbEntity = _table.Where(e => e.Equals(entity)).FirstOrDefault();
             if (dbEntity == null)
             {
                 throw new NullReferenceException("There is no such entity in the DB!");
@@ -70,7 +72,7 @@ namespace TeamInternationalTestEf.Repos
             SaveChanges();
         }
 
-        public void RemoveRange(TEntity[] entities)
+        public virtual void RemoveRange(TEntity[] entities)
         {
             if (entities == null)
             {
@@ -81,7 +83,7 @@ namespace TeamInternationalTestEf.Repos
             SaveChanges();
         }
 
-        public bool SaveChanges()
+        public virtual bool SaveChanges()
         {
             try
             {
@@ -92,27 +94,29 @@ namespace TeamInternationalTestEf.Repos
             {
                 // log exception or do other actions to handle the error...
 
-                return false;
-            }            
+                throw;
+            }
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException($"Input value can't be null!");
             }
 
-            var dbEntity = _table.Find(entity);
+            var dbEntity = _table.Where(e => e.Equals(entity)).FirstOrDefault();
             if (dbEntity == null)
             {
                 throw new NullReferenceException("There is no such entity in the DB!");
             }
 
-            _table.Update(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+
+            SaveChanges();
         }
 
-        public void UpdateRange(TEntity[] entities)
+        public virtual void UpdateRange(TEntity[] entities)
         {
             if (entities == null)
             {

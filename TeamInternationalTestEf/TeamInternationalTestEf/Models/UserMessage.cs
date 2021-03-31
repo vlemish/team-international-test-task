@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace TeamInternationalTestEf.Models
 {
@@ -10,9 +8,7 @@ namespace TeamInternationalTestEf.Models
     {
         public int Id { get; set; }
 
-        public DateTime TimeCreated { get; set; }
-
-        public bool IsSavedMessage { get; set; }
+        public DateTime CreationTime { get; set; }
 
         public int UserId { get; set; }
 
@@ -24,10 +20,9 @@ namespace TeamInternationalTestEf.Models
 
         }
 
-        public UserMessage(DateTime timeCreated, bool isSavedMessage, int userId)
+        public UserMessage(DateTime creationTime, int userId)
         {
-            TimeCreated = timeCreated;
-            IsSavedMessage = isSavedMessage;
+            CreationTime = creationTime;
             UserId = userId;
         }
     }

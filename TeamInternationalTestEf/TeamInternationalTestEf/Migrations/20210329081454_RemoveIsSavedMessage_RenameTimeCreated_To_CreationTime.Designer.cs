@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamInternationalTestEf.EF;
 
 namespace TeamInternationalTestEf.Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    partial class TestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210329081454_RemoveIsSavedMessage_RenameTimeCreated_To_CreationTime")]
+    partial class RemoveIsSavedMessage_RenameTimeCreated_To_CreationTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +38,9 @@ namespace TeamInternationalTestEf.Migrations
 
                     b.Property<byte[]>("Data")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasMaxLength(300)
+                        .IsUnicode(true)
+                        .HasColumnType("varbinary(300)");
 
                     b.Property<string>("Name")
                         .IsRequired()

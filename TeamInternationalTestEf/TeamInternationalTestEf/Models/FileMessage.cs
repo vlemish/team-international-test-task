@@ -4,16 +4,19 @@ namespace TeamInternationalTestEf.Models
 {
     public class FileMessage : UserMessage
     {
-        public byte[] Data { get; set; }
+        public string Name { get; set; }
 
+        public string ContentType { get; set; }
+
+        public byte[] Data { get; set; }
 
         public FileMessage()
         {
 
         }
 
-        public FileMessage(DateTime timeCreated, bool isSavedMessage, int userId, byte[] data)
-            : base(timeCreated, isSavedMessage, userId)
+        public FileMessage(DateTime creationTime, int userId, byte[] data)
+            : base(creationTime, userId)
         {
             Data = data;
         }
