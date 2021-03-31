@@ -2,18 +2,32 @@
     <div class="content" (mouseover)="onImgMouseOver()" (mouseout)="onImgMouseOut()">
         <div class="msg-body">
             <div [class]="headerClass">
-                <div class="flex-container-right">
-                    <button style="border-color: white; background-color: black;" (click)="onDeleteClick()">
-                        <fa-icon class="detele-icon" [icon]="deleteIcon"></fa-icon>
-                    </button>
+                <div class="img-name-wrapper">
+                    <div class="flex-container">
+                        <p style="color: white;">{{getFileName()}}</p>
+                    </div>
+                </div>
+                <div class="dropdown-wrapper" (mouseover)="onShowMoreOver()" (mouseout)="onShowMoreOut()">
+                    <div class="flex-container-row-reverse">
+                        <button style="border:none; background: none;">
+                            <fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon>
+                        </button>
+                        <div [class]="dropDownClass">
+                            <button style="border:none; background: none;" (click)="onDeleteClick()">
+                                <fa-icon class="dropdown-el trash-icon" [icon]="trashIcon"></fa-icon>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <img height="600" width="480" src="{{imgUrl}}">
+            <img [src]='extractImage()'>
             <div [class]="footerClass" (mouseover)="onImgMouseOver()" (mouseout)="onImgMouseOut()">
-                <div class="flex-container-right">
-                    <p class="p-time">
-                        12:44
-                    </p>
+                <div class="time-wrapper">
+                    <div class="flex-container">
+                        <p class="p-time">
+                            {{imgMessage.creationTime | date:'h:mm a'}}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

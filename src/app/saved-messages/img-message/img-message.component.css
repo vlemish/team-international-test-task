@@ -10,8 +10,7 @@
     align-items: center;
     justify-content: space-evenly;
   }
-  .flex-container-right {
-    float: right;
+  .flex-container-row-reverse {
     height: 100%;
     padding: 0;
     margin: 0;
@@ -19,10 +18,23 @@
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
-    display: flex;
-    align-items: right;
-    justify-content: right;
     flex-direction: row-reverse;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+  }
+  .img-name-wrapper{
+    padding-left: 20px;
+    float:left;
+    height: 100%;
+    width: 100px;
+  }
+  .dropdown-wrapper{
+    padding-right: 10px;
+    float:right;
+    height: 100%;
+    width: 100px;
+    text-align: right;
   }
   .content{      
     background-color: white;
@@ -48,25 +60,51 @@
     width: 100%;
     height: 40px;
 }
-.detele-icon{
-    color: red;
-    font-size: 22px;
-}
-.detele-icon:hover{
-    font-size: 26px;
-}
 .delete-icon-placeholder{
     width: 30px;
     height: 100%;
     float: right;
     margin-right: 10px;
 }
+.time-wrapper{
+  height: 100%;
+  width: 100px;
+  float: right;
+}
 .p-time{
-    color: white;
-    align-self: center;
-    font-size: 16px;
-    padding-right: 16px;
+    color: white;    
+    font-size: 14px;
+    text-align: right;
 }
 .hidden{
     visibility: hidden;
+}
+img{
+  max-height: 600px;
+  max-width: 480px;
+  min-height: 200px;
+  min-width: 80px;
+}
+.dropdown-list{
+  padding-left: 4px;
+}
+.dropdown-el{
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.drop-down-icon{
+  color: white;
+  font-size: 20px;
+}
+.drop-down-icon:hover{
+  color: white;
+  font-size: 22px;
+}
+.trash-icon{
+  color: red;
+  font-size: 20px;
+}
+.trash-icon:hover{
+  color:darkred;
+  font-size: 22px;
 }

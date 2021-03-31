@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
-import { User } from '../models/user';
-import { Injectable } from '@angular/core';
+import { User } from '../models/User';
 import { AuthenticationService } from '../services/authentication.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +11,10 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private authenticationService: AuthenticationService) { }
+  constructor(
+    private authenticationService: AuthenticationService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.authenticationService.logout();
@@ -93,7 +96,7 @@ export class LoginComponent implements OnInit {
   //sends formed user to the server and gets the response. If the user is exist it means that the data has spelled correct, so client will be redirected to another page and etc.
   //If the user doesn't exist, isCorrectData variable would change to false and that would return to client an error message  
   loginUser() {
-    // this.authenticationService.logout();
+    this.authenticationService.logout();
     if (this.user.username === null || this.user.password === null) {
       this.onUsernameBlur();
       this.onPasswordBlur();
@@ -104,27 +107,12 @@ export class LoginComponent implements OnInit {
       data => {
         console.log('gotcha');
         console.log(localStorage.getItem('currentUser'));
+        this.router.navigateByUrl('/saved-messages');
       },
       error => {
         console.log(error);
       }
     );
-
-    // this.loginService.logIn(this.user).subscribe((response: any) => {
-    //   this.isCorrectData = true;
-    //   this.loginService.setToken(response.token);
-    //   this.loginService.setIdentity(response.identity);
-    //   console.log(this.loginService.getToken());
-    //   console.log(this.loginService.getIdentity());
-    //   this.router.navigate(['/main']);
-    // },
-    //   err => {
-    //     if (err.status == 400) {
-    //       this.isCorrectData = false;
-    //       this.loginService.removeToken('token');
-    //       this.loginService.removeIdentity('identity');
-    //     }
-    //   });
   }
 
 }

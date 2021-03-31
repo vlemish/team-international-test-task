@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -16,6 +16,9 @@ import { TextMessageComponent } from './saved-messages/text-message/text-message
 import { ImgMessageComponent } from './saved-messages/img-message/img-message.component';
 import { LoginComponent } from './login/login.component';
 import { AuthenticationService } from './services/authentication.service';
+import { CreateTextMsgComponent } from './saved-messages/create-text-msg/create-text-msg.component';
+import { FileMessagesService } from './services/file-messages.service';
+import { TextMessagesService } from './services/text-messages.service';
 
 @NgModule({
   declarations: [
@@ -24,18 +27,34 @@ import { AuthenticationService } from './services/authentication.service';
     FileMessageComponent,
     TextMessageComponent,
     ImgMessageComponent,
-    LoginComponent
+    LoginComponent,
+    CreateTextMsgComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     FontAwesomeModule,
-    HttpClientModule
+    HttpClientModule,
+    
   ],
   providers: [
     AuthGuard,
     AuthenticationService,
+    FileMessagesService,
+    {
+        provide: HTTP_INTERCEPTORS,
+        useClass: JwtInterceptor,
+        multi: true
+
+    },
+    TextMessagesService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    // ImageMessagesService
     // UserService,
     // {
     //     provide: HTTP_INTERCEPTORS,

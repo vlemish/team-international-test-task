@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { TextMessage } from 'src/app/models/TextMessage';
+import { TextMessagesService } from 'src/app/services/text-messages.service';
+import { DatePipe } from '@angular/common'
+
 @Component({
   selector: 'app-text-message',
   templateUrl: './text-message.component.html',
@@ -7,7 +11,7 @@ import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 })
 export class TextMessageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private textService: TextMessagesService) { }
 
   dropDownIcon = faEllipsisV;
   trashIcon = faTrash;
@@ -17,33 +21,81 @@ export class TextMessageComponent implements OnInit {
   editabeContentClass: string = "hidden";
   staticContentClass: string = "";
 
-  content: string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temporncididunt" + 
-  "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+  @Output() componentUpdated = new EventEmitter();
+
+  @Input() txtMessage: TextMessage = new TextMessage();
+
+
+  canEdit(): boolean {
+    let dateToday = new Date(Date.now());
+    let dateCreation = new Date(this.txtMessage.creationTime);
+    let diffDate = dateToday.getDate() - dateCreation.getDate();
+
+    //if the day is today check hours + minutes
+    if (diffDate === 0) {
+      let currentHours = new Date(Date.now()).getHours();
+      let creationHours = new Date(this.txtMessage.creationTime).getHours();
+      let currentMinutes = new Date(Date.now()).getMinutes();
+      let creationMinutes = new Date(this.txtMessage.creationTime).getMinutes();
+
+      let diffHours = currentHours - creationHours;
+      let diffMin = currentMinutes - creationMinutes;
+      if (diffHours !== 0 && diffMin >= 15) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   onShowMoreOver() {
     this.dropDownClass = "dropdown-list";
   }
 
-  onShowMoreOut(){
+  onShowMoreOut() {
     this.dropDownClass = "dropdown-list hidden";
   }
 
   onEditClick() {
-    this.editabeContentClass = "";
-    this.staticContentClass = "hidden";
+    if (this.canEdit()) {
+      this.editabeContentClass = "";
+      this.staticContentClass = "hidden";
+    }
+    else {
+      window.alert('You can edit the file only in 15 minutes after creating!');
+    }
   }
 
   onDeleteClick() {
-    //some logic...
+    if (this.canEdit()) {
+      this.textService.deleteTextMessage(this.txtMessage.id).subscribe(
+        () => {
+          this.componentUpdated.emit();
+        },
+        (error) => {
+
+        });
+    }
+    else {
+      window.alert('You can delete the file only in 15 minutes after creating!');
+    }
   }
 
   onSaveClick() {
     this.editabeContentClass = "hidden";
     this.staticContentClass = "";
+
+    this.textService.updateTextMessage(this.txtMessage.id, this.txtMessage.content).subscribe(
+      (data) => {
+        this.componentUpdated.emit();
+      },
+      (error) => {
+
+      }
+    );
   }
 
   onTextAreaChange(event: any) {
-    this.content += event.target.value;
+    this.txtMessage.content = event.target.value;
   }
 
   ngOnInit(): void {

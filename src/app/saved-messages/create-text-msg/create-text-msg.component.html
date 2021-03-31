@@ -1,0 +1,12 @@
+<textarea class="form-control input-size" placeholder="Your message..." (change)="onContentChange($event)">
+{{content}}
+</textarea> 
+<!-- class="form-control input-size" placeholder="Your message..." value="{{content}}" (change)="onContentChange($event)" /> -->
+    <div class="flex-container-row">
+        <button class="btn btn-danger dlt-btn-size" (click)="onCancelClicked()">
+            Cancel
+        </button>
+        <button class="btn btn-success add-btn-size" (click)="onAddClicked()">
+            Add
+        </button>
+    </div>

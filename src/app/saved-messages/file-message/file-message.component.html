@@ -19,11 +19,11 @@
                 </button>
             </div>
             <div class="flex-container" style="margin-left: 20px; margin-right: 20px;">
-                <p class="file-name">superfile.txt</p>
+                <p class="file-name">{{getFileName()}}</p>
             </div>
         </div>
         <p class="p-time">
-            12:44
+            {{fileMessage.creationTime | date:'h:mm a'}}
         </p>
     </div>
 </div>

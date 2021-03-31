@@ -2,11 +2,17 @@
     <div class="content">
         <div class="msg-header">
             <div class="flex-container-right" (mouseover)="onShowMoreOver()" (mouseout)="onShowMoreOut()">
-                    <button style="border:none; background-color: white;"><fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon></button>          
-                    <div [class]="dropDownClass">
-                        <button style="border:none; background-color: white;"  (click)="onEditClick()"><fa-icon class="dropdown-el edit-icon" [icon]="editIcon"></fa-icon></button>
-                        <button style="border:none; background-color: white;" (click)="onDeleteClick()"><fa-icon class="dropdown-el trash-icon" [icon]="trashIcon"></fa-icon></button>             
-                    </div>
+                <button style="border:none; background-color: white;">
+                    <fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon>
+                </button>
+                <div [class]="dropDownClass">
+                    <button style="border:none; background-color: white;" (click)="onEditClick()">
+                        <fa-icon class="dropdown-el edit-icon" [icon]="editIcon"></fa-icon>
+                    </button>
+                    <button style="border:none; background-color: white;" (click)="onDeleteClick()">
+                        <fa-icon class="dropdown-el trash-icon" [icon]="trashIcon"></fa-icon>
+                    </button>
+                </div>
             </div>
             <!-- <button style="border:none; background-color: white;" (click)="onShowMoreClick()"><fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon></button>          
             <div [class]="dropDownClass">
@@ -16,16 +22,16 @@
         </div>
         <div class="msg-body">
             <div [class]="editabeContentClass">
-                <textarea class="input-body" (change)="onTextAreaChange($event)">{{content}}</textarea>
+                <textarea class="input-body" (change)="onTextAreaChange($event)">{{txtMessage.content}}</textarea>
                 <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px;">
                     <button class="btn btn-success btn-size" (click)="onSaveClick()">Save</button>
                 </div>
             </div>
             <div [class]="staticContentClass">
-                <p class="p-body">{{content}}</p>
+                <p class="p-body">{{txtMessage.content}}</p>
                 <div>
                     <p class="p-time">
-                        12:44
+                        {{txtMessage.creationTime | date:'h:mm a'}}
                     </p>
                 </div>
             </div>
