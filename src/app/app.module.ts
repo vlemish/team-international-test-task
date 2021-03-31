@@ -19,6 +19,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { CreateTextMsgComponent } from './saved-messages/create-text-msg/create-text-msg.component';
 import { FileMessagesService } from './services/file-messages.service';
 import { TextMessagesService } from './services/text-messages.service';
+import {ImageMessagesService} from './services/image-messages.service';
 
 @NgModule({
   declarations: [
@@ -54,13 +55,12 @@ import { TextMessagesService } from './services/text-messages.service';
       useClass: JwtInterceptor,
       multi: true
     },
-    // ImageMessagesService
-    // UserService,
-    // {
-    //     provide: HTTP_INTERCEPTORS,
-    //     useClass: JwtInterceptor,
-    //     multi: true
-    // },
+    ImageMessagesService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

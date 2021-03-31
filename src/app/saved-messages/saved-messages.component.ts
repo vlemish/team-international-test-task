@@ -6,6 +6,7 @@ import { FileMessagesService } from '../services/file-messages.service';
 import { TextMessagesService } from '../services/text-messages.service';
 import { IMessage } from '../models/IMessage';
 import { ImageMessage } from '../models/ImageMessage';
+import { ImageMessagesService } from '../services/image-messages.service';
 
 @Component({
   selector: 'app-saved-messages',
@@ -17,7 +18,8 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
   constructor(
     private elementRef: ElementRef,
     private fileService: FileMessagesService,
-    private textService: TextMessagesService) { }
+    private textService: TextMessagesService,
+    private imgService: ImageMessagesService) { }
 
   messagesCount: number = 0;
 
@@ -52,7 +54,7 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
     this.files = [];
     let tempTextMessages = await this.textService.getAllTextMessages();
     let tempFileMessages = await this.fileService.getAllFileMessages();
-    let tempImgMessages = await this.fileService.getAllImageMessages();
+    let tempImgMessages = await this.imgService.getAllImageMessages();
 
     tempFileMessages.forEach((file) => {
       //should be a logic to check whether we've already have the file 
@@ -102,10 +104,28 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
     this.addFile();
   }
 
+  onImageChoose(e: any){
+    this.fileToUpload = e.target.files[0];
+    this.addImage();
+  }
+
   addFile() {
     let form = new FormData();
     form.append('file', this.fileToUpload)
     this.fileService.addFileMessage(form).subscribe(
+      () => {
+        this.loadData();
+      },
+      (error) => {
+
+      }
+    );
+  }
+
+  addImage(){
+    let form = new FormData();
+    form.append('file', this.fileToUpload)
+    this.imgService.addImageMessage(form).subscribe(
       () => {
         this.loadData();
       },

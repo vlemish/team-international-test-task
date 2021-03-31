@@ -3,6 +3,7 @@ import { faEllipsisV, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ImageMessage } from 'src/app/models/ImageMessage';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileMessagesService } from 'src/app/services/file-messages.service';
+import { ImageMessagesService } from 'src/app/services/image-messages.service';
 
 @Component({
   selector: 'app-img-message',
@@ -13,7 +14,7 @@ export class ImgMessageComponent implements OnInit {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private fileService: FileMessagesService) { }
+    private imgService: ImageMessagesService) { }
 
   dropDownIcon = faEllipsisV;
   trashIcon = faTrash;
@@ -83,7 +84,7 @@ export class ImgMessageComponent implements OnInit {
 
   onDeleteClick() {
     if (this.canEdit()) {
-      this.fileService.deleteFileMessage(this.imgMessage.id).subscribe(
+      this.imgService.deleteImageMessage(this.imgMessage.id).subscribe(
         () => {
           this.componentUpdated.emit();
         },

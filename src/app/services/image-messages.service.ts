@@ -1,42 +1,37 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FileMessage } from '../models/FileMessage';
 import { map, filter, switchMap } from 'rxjs/operators';
 import { ImageMessage } from '../models/ImageMessage';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FileMessagesService {
+export class ImageMessagesService {
 
   constructor(private http: HttpClient) { }
 
   //url to web api
-  private _url: string = "https://localhost:44330/api/file-messages";
+  private _url: string = "https://localhost:44330/api/img-messages";  
 
-  getAllFileMessages() {
-    return this.http.get<FileMessage[]>(this._url).pipe(
+  getAllImageMessages() {
+    return this.http.get<ImageMessage[]>(this._url).pipe(
       map(response => {
         response.forEach(el => {
-          el.type = 'file';
+          el.type = 'img';
         })
         return response;
       })
     ).toPromise();
   }
 
-  downloadFile(id: number) {
-    return this.http.get(this._url + '/' + 'download' + '/' + id, { responseType: 'blob' }).pipe();
-  }
-
-  addFileMessage(entity: FormData) {
+  addImageMessage(entity: FormData) {
     console.log(entity);
     return this.http.post(this._url,
       entity
     );
   }
 
-  deleteFileMessage(id: number) {
+  deleteImageMessage(id: number) {
     return this.http.delete(this._url + '/' + id);
   }
 }
