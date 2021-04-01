@@ -1,0 +1,69 @@
+
+<div class="body-container">
+    <div clas="header">
+        <h1>
+            <button style="border:none; background-color: lightgray;" (click)="onShowChange()">
+                <fa-icon [icon]="faCaret"></fa-icon>
+            </button>
+            <b>✉️ Saved Messages ({{messagesCount}})</b>
+        </h1>
+    </div>
+    <div [class]="contentClass">
+        <div class="msg-el" *ngFor="let file of files" [ngSwitch]="file">
+            <div [ngSwitch]="file.type">
+                <div *ngSwitchCase="'text'">
+                    <app-text-message [txtMessage]=castToTextMessage(file) (componentUpdated)="onUpdate()">
+                    </app-text-message>
+                </div>
+                <div *ngSwitchCase="'file'">
+                    <app-file-message [fileMessage]=castToFileMessage(file) (componentUpdated)="onUpdate()">
+                    </app-file-message>
+                </div>
+                <div *ngSwitchCase="'img'">
+                    <app-img-message [imgMessage]=castToImgMessage(file) (componentUpdated)="onUpdate()">
+                    </app-img-message>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="msg-el">
+        
+        <app-img-message [imgMessage]=castToImgMessage(file) (componentUpdated)="onUpdate()">
+        </app-img-message>
+    </div> -->
+    <div [class]="addMessagesClass">
+        <div class="flex-container">
+            <div class="dropup">
+                <button style="border: none; background-color: lightgrey;">
+                    <fa-icon class="add-btn" [icon]="addIcon"></fa-icon>
+                </button>
+                <div class="dropup-content">
+                    <a>
+                        <label class="label-file" (click)="onAddTextClick()">
+                            <fa-icon class="img-icon" [icon]="addText"></fa-icon>
+                            Add text
+                        </label>
+                    </a>
+                    <a>
+                        <label for="attach-img" class="label-file">
+                            <fa-icon class="img-icon" [icon]="attachImage"></fa-icon>
+                            Attach img
+                        </label>
+                        <input type="file" id="attach-img" accept="image/x-png,image/gif,image/jpeg"
+                            (change)="onImageChoose($event)" />
+                    </a>
+                    <a>
+                        <label for="attach-file" class="label-file">
+                            <fa-icon class="file-icon" [icon]="attachFile"></fa-icon>
+                            Attach file
+                        </label>
+                        <input type="file" id="attach-file" (change)="onFileChoose($event)" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div [class]="createTxtMsgClass">
+        <app-create-text-msg (onComponentDone)="onCreateComponentDone($event)"></app-create-text-msg>
+    </div>
+</div>
