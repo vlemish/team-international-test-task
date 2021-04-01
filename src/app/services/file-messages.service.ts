@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { FileMessage } from '../models/FileMessage';
 import { map, filter, switchMap } from 'rxjs/operators';
 import { ImageMessage } from '../models/ImageMessage';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,10 @@ export class FileMessagesService {
         return response;
       })
     ).toPromise();
+  }
+
+  getFileMessageById(id: number){
+    return this.http.get<ImageMessage>(this._url + '/' + id);
   }
 
   downloadFile(id: number) {

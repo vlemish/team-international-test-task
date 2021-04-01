@@ -39,7 +39,7 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'lightgray';   
-    this.loadData();
+    this.loadData();    
   }
   ngOnDestroy(): void {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'white';    
@@ -50,7 +50,7 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
   }
 
   async loadData() {
-    this.messagesCount = 0;
+    // this.messagesCount = 0;
     this.files = [];
     let tempTextMessages = await this.textService.getAllTextMessages();
     let tempFileMessages = await this.fileService.getAllFileMessages();
@@ -113,7 +113,7 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
     let form = new FormData();
     form.append('file', this.fileToUpload)
     this.fileService.addFileMessage(form).subscribe(
-      () => {
+      (file) => {
         this.loadData();
       },
       (error) => {
@@ -126,7 +126,7 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
     let form = new FormData();
     form.append('file', this.fileToUpload)
     this.imgService.addImageMessage(form).subscribe(
-      () => {
+      (file) => {
         this.loadData();
       },
       (error) => {

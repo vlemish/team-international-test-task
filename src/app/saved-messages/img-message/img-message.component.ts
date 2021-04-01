@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faEllipsisV, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ImageMessage } from 'src/app/models/ImageMessage';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { FileMessagesService } from 'src/app/services/file-messages.service';
 import { ImageMessagesService } from 'src/app/services/image-messages.service';
 
@@ -25,12 +25,15 @@ export class ImgMessageComponent implements OnInit {
   editabeContentClass: string = "hidden";
   staticContentClass: string = "";
 
+
   @Input() imgMessage: ImageMessage = new ImageMessage();
   @Output() componentUpdated = new EventEmitter();
 
+  imgUrl: SafeUrl = "";
+
   extractImage() {
     let url = 'data:' + this.imgMessage.contentType + ';base64,' + this.imgMessage.data;
-    return this.sanitizer.bypassSecurityTrustUrl(url);
+    this.imgUrl = this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   getFileName() {
@@ -45,20 +48,19 @@ export class ImgMessageComponent implements OnInit {
     let dateCreation = new Date(this.imgMessage.creationTime);
     let diffDate = dateToday.getDate() - dateCreation.getDate();
 
-    //if the day is today check hours + minutes
+    // if the day is today check hours and minutes
     if (diffDate === 0) {
       let currentHours = new Date(Date.now()).getHours();
       let creationHours = new Date(this.imgMessage.creationTime).getHours();
       let currentMinutes = new Date(Date.now()).getMinutes();
-      let creationMinutes = new Date(this.imgMessage.creationTime).getMinutes();
-
+      let creationMinutes = new Date(this.imgMessage.creationTime).getMinutes();      
       let diffHours = currentHours - creationHours;
       let diffMin = currentMinutes - creationMinutes;
-      if (diffHours !== 0 && diffMin >= 15) {
-        return false;
+      if (diffHours !== 0 || Math.abs(diffMin) >= 15) {
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   onShowMoreOver() {
@@ -80,6 +82,7 @@ export class ImgMessageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.extractImage();
   }
 
   onDeleteClick() {

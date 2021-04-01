@@ -17,6 +17,8 @@ export class FileMessageComponent implements OnInit {
   trashIcon = faTrash;
   fileIcon = faFile;
 
+  img : string = "https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg";
+
   dropDownClass: string = "dropdown-list hidden"
   editabeContentClass: string = "hidden";
   staticContentClass: string = "";
@@ -39,20 +41,19 @@ export class FileMessageComponent implements OnInit {
     let dateCreation = new Date(this.fileMessage.creationTime);
     let diffDate = dateToday.getDate() - dateCreation.getDate();
 
-    //if the day is today check hours + minutes
+    // if the day is today check hours and minutes
     if (diffDate === 0) {
       let currentHours = new Date(Date.now()).getHours();
       let creationHours = new Date(this.fileMessage.creationTime).getHours();
       let currentMinutes = new Date(Date.now()).getMinutes();
-      let creationMinutes = new Date(this.fileMessage.creationTime).getMinutes();
-
+      let creationMinutes = new Date(this.fileMessage.creationTime).getMinutes();      
       let diffHours = currentHours - creationHours;
       let diffMin = currentMinutes - creationMinutes;
-      if (diffHours !== 0 && diffMin >= 15) {
-        return false;
+      if (diffHours !== 0 || Math.abs(diffMin) >= 15) {
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   onDownloadClick() {
@@ -99,4 +100,3 @@ export class FileMessageComponent implements OnInit {
     }
   }
 }
-

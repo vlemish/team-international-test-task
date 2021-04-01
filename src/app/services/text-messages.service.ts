@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, filter, switchMap } from 'rxjs/operators';
 import { TextMessage } from '../models/TextMessage';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

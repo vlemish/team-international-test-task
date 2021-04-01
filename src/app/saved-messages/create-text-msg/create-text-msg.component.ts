@@ -19,8 +19,7 @@ export class CreateTextMsgComponent implements OnInit {
 
   onAddClicked(){     
     this.textService.addTextMessage(this.content).subscribe(
-      (data)=>{
-        console.log('added!');
+      (data)=>{     
         this.onComponentDone.emit(1);
       },
       (error)=>{

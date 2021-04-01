@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { TextMessage } from 'src/app/models/TextMessage';
 import { TextMessagesService } from 'src/app/services/text-messages.service';
-import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-text-message',
@@ -31,7 +30,7 @@ export class TextMessageComponent implements OnInit {
     let dateCreation = new Date(this.txtMessage.creationTime);
     let diffDate = dateToday.getDate() - dateCreation.getDate();
 
-    //if the day is today check hours + minutes
+    //if the day is today check hours and minutes
     if (diffDate === 0) {
       let currentHours = new Date(Date.now()).getHours();
       let creationHours = new Date(this.txtMessage.creationTime).getHours();
@@ -41,10 +40,10 @@ export class TextMessageComponent implements OnInit {
       let diffHours = currentHours - creationHours;
       let diffMin = currentMinutes - creationMinutes;
       if (diffHours !== 0 && diffMin >= 15) {
-        return false;
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   onShowMoreOver() {

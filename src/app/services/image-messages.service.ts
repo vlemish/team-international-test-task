@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { map, filter, switchMap } from 'rxjs/operators';
 import { ImageMessage } from '../models/ImageMessage';
 
@@ -22,6 +23,10 @@ export class ImageMessagesService {
         return response;
       })
     ).toPromise();
+  }
+
+  getImageMessageById(id: number){
+    return this.http.get<ImageMessage>(this._url + '/' + id);
   }
 
   addImageMessage(entity: FormData) {
