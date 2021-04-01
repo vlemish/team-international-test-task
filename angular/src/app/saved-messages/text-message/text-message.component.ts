@@ -27,19 +27,18 @@ export class TextMessageComponent implements OnInit {
 
   canEdit(): boolean {
     let dateToday = new Date(Date.now());
-    let dateCreation = new Date(this.txtMessage.creationTime);
+    let dateCreation = new Date(this.imgMessage.creationTime);
     let diffDate = dateToday.getDate() - dateCreation.getDate();
 
-    //if the day is today check hours and minutes
+    // if the day is today check hours and minutes
     if (diffDate === 0) {
       let currentHours = new Date(Date.now()).getHours();
-      let creationHours = new Date(this.txtMessage.creationTime).getHours();
+      let creationHours = new Date(this.imgMessage.creationTime).getHours();
       let currentMinutes = new Date(Date.now()).getMinutes();
-      let creationMinutes = new Date(this.txtMessage.creationTime).getMinutes();
-
+      let creationMinutes = new Date(this.imgMessage.creationTime).getMinutes();      
       let diffHours = currentHours - creationHours;
       let diffMin = currentMinutes - creationMinutes;
-      if (diffHours !== 0 && diffMin >= 15) {
+      if (diffHours !== 0 || Math.abs(diffMin) >= 15) {
         return true;
       }
     }
