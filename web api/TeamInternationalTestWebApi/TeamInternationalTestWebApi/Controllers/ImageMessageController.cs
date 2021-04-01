@@ -14,6 +14,7 @@ using TeamInternationalTestWebApi.Helpers;
 
 namespace TeamInternationalTestWebApi.Controllers
 {
+    [Authorize]
     [Route("api/img-messages")]
     [ApiController]
     public class ImageMessageController : ControllerBase
@@ -51,7 +52,7 @@ namespace TeamInternationalTestWebApi.Controllers
         }
 
         //GET: api/img-messages/1
-        [Authorize]
+
         [HttpGet("{id}", Name = "GetImgById")]
         public ActionResult<ReadImgMessageDto> GetImgById(int id)
         {
@@ -93,11 +94,9 @@ namespace TeamInternationalTestWebApi.Controllers
                 var model = _mapper.Map<ImageMessage>(createImgMessageDto);
                 _repo.Add(model);
 
-                //mapping doesn't work 
-                //var fileMessageReadDto = _mapper.Map<ReadFileMessageDto>(model);
-                //return CreatedAtRoute(nameof(GetImgById), new { Id = fileMessageReadDto.Id }, fileMessageReadDto);
 
-                return NoContent();
+                var fileMessageReadDto = _mapper.Map<ReadImgMessageDto>(model);
+                return CreatedAtRoute(nameof(GetImgById), new { Id = fileMessageReadDto.Id }, fileMessageReadDto);
             }
             catch (InvalidContentTypeException e)
             {
@@ -110,7 +109,7 @@ namespace TeamInternationalTestWebApi.Controllers
         }
 
         //DELETE: api/img-messages/1
-        [Authorize]
+
         [HttpDelete("{id}")]
         public IActionResult DeleteImg(int id)
         {

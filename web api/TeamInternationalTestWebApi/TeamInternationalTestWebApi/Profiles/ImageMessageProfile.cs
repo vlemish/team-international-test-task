@@ -24,6 +24,7 @@ namespace TeamInternationalTestWebApi.Profiles
 
             CreateMap<ImageMessage, ReadImgMessageDto>();
             CreateMap<ReadImgMessageDto, ImageMessage>();
+
             CreateMap<CreateImgMessageDto, ImageMessage>()
                 .ForMember(dest => dest.ContentType, opt => opt.MapFrom(src => src.Data.ContentType))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Data.FileName))

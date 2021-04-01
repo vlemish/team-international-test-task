@@ -11,6 +11,7 @@ namespace TeamInternationalTestWebApi.Profiles
         {
             CreateMap<TextMessage, ReadTextMessageDto>();
             CreateMap<TextMessage, ReadTextMessageDto>().ReverseMap();
+
             CreateMap<TextMessage, CreateUpdateServerMessageDto>();
             CreateMap<TextMessage, CreateUpdateServerMessageDto>().ReverseMap()
                  .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => DateTime.Now.ToLocalTime()));

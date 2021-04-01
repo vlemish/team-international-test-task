@@ -21,8 +21,16 @@ namespace TeamInternationalTestWebApi.Profiles
                 }
             };
 
-            CreateMap<FileMessageManifest, ReadFileMessageDto>();
+
+            CreateMap<ReadFileMessageDto, FileMessage>();
+            CreateMap<ReadFileMessageDto, FileMessage>().ReverseMap();
+
+            CreateMap<FileMessage, FileMessageManifest>();
+            CreateMap<FileMessage, FileMessageManifest>().ReverseMap();
+
             CreateMap<ReadFileMessageDto, FileMessageManifest>();
+            CreateMap<ReadFileMessageDto, FileMessageManifest>().ReverseMap();
+
             CreateMap<CreateFileMessageDto, FileMessage>()
                 .ForMember(dest => dest.ContentType, opt => opt.MapFrom(src => src.Data.ContentType))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Data.FileName))
