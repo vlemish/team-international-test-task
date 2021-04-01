@@ -17,7 +17,7 @@ namespace TeamInternationalTestEf.Repos
             return _table.Where(fm => fm.UserId.Equals(userId)).Select(fm => fm).ToArray();
         }
 
-        public FileMessageManifest[] GetAllByUserIdManifest(int userId)
+        public FileMessageManifest[] GetAllFilesManifestByUserId(int userId)
         {
             return _table.Where(fm => fm.UserId.Equals(userId))
                 .Select(fm => new FileMessageManifest(fm.Id, fm.CreationTime, fm.UserId, fm.Name, fm.ContentType))

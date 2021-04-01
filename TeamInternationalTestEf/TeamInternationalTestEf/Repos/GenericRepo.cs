@@ -55,6 +55,7 @@ namespace TeamInternationalTestEf.Repos
             return _table.Find(id);
         }
 
+
         public virtual void Remove(TEntity entity)
         {
             if (entity == null)

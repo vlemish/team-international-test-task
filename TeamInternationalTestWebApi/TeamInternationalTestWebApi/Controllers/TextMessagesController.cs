@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using TeamInternationalTestEf.Models;
 using TeamInternationalTestEf.Repos;
 using TeamInternationalTestWebApi.DTOs.TextMessageDTOs;
@@ -32,24 +33,38 @@ namespace TeamInternationalTestWebApi.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ReadTextMessageDto>> GetAllTextMessages()
         {
-            var userId = (HttpContext.Items["User"] as User).Id;
-            var textMessages = (_repo as TextMessageRepo).GetAllByUserId(userId).ToList();
-            var readDto = _mapper.Map<IEnumerable<ReadTextMessageDto>>(textMessages);
-            return Ok(readDto);
+            try
+            {
+                var userId = (HttpContext.Items["User"] as User).Id;
+                var textMessages = (_repo as TextMessageRepo).GetAllByUserId(userId).ToList();
+                var readDto = _mapper.Map<IEnumerable<ReadTextMessageDto>>(textMessages);
+                return Ok(readDto);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         //GET: /api/text-messages/1
         [HttpGet("{id}", Name = "GetTextMessageById")]
         public ActionResult<ReadTextMessageDto> GetTextMessageById(int id)
         {
-            var textMessage = _repo.GetOneById(id);
-            if (textMessage == null)
+            try
             {
-                return NotFound();
-            }
+                var textMessage = _repo.GetOneById(id);
+                if (textMessage == null)
+                {
+                    return NotFound();
+                }
 
-            var readDto = _mapper.Map<ReadTextMessageDto>(textMessage);
-            return Ok(readDto);
+                var readDto = _mapper.Map<ReadTextMessageDto>(textMessage);
+                return Ok(readDto);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         //POST: /api/text-messages/
@@ -60,33 +75,44 @@ namespace TeamInternationalTestWebApi.Controllers
             {
                 return BadRequest("Value can't be null!");
             }
-            var userId = (HttpContext.Items["User"] as User).Id;
-            var updateDeleteTextMessageDto = new CreateUpdateServerMessageDto()
+            try
             {
-                Content = content.Content,
-                UserId = userId
+                var userId = (HttpContext.Items["User"] as User).Id;
+                var updateDeleteTextMessageDto = new CreateUpdateServerMessageDto()
+                {
+                    Content = content.Content,
+                    UserId = userId
 
-            };
-            var textMessage = _mapper.Map<TextMessage>(updateDeleteTextMessageDto);
-            _repo.Add(textMessage);
+                };
+                var textMessage = _mapper.Map<TextMessage>(updateDeleteTextMessageDto);
+                _repo.Add(textMessage);
 
-            var readMessageDto = _mapper.Map<ReadTextMessageDto>(textMessage);
+                var readModel = _mapper.Map<ReadTextMessageDto>(textMessage);
 
-            return CreatedAtRoute(nameof(GetTextMessageById), new { Id = readMessageDto.Id }, readMessageDto);
+                return CreatedAtRoute(nameof(GetTextMessageById), new { Id = readModel.Id }, readModel);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         //PUT /api/text-messages/1
         [HttpPut("{id}")]
         public IActionResult UpdateTextMessage(int id, CreateUpdateClientMessageDto updateDeleteTextMessageDto)
         {
-            var textMessage = _repo.GetOneById(id);
-            if (textMessage == null)
+            if (id == 0 || updateDeleteTextMessageDto == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-
             try
             {
+                var textMessage = _repo.GetOneById(id);
+                if (textMessage == null)
+                {
+                    return NotFound();
+                }
+
                 textMessage.Content = updateDeleteTextMessageDto.Content;
                 _repo.Update(textMessage);
                 return NoContent();
@@ -102,19 +128,18 @@ namespace TeamInternationalTestWebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteTextMessage(int id)
         {
-            var textMessage = _repo.GetOneById(id);
-            if (textMessage == null)
-            {
-                return NotFound();
-            }
-
             try
             {
-                _repo.Remove(textMessage);
+                var textMessage = _repo.GetOneById(id);
+                if (textMessage == null)
+                {
+                    return NotFound();
+                }
 
+                _repo.Remove(textMessage);
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(500);
             }

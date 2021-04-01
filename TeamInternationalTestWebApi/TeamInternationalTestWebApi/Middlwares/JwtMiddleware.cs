@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeamInternationalTestWebApi.Services;
 
 namespace TeamInternationalTestWebApi.Middlwares
@@ -13,16 +14,14 @@ namespace TeamInternationalTestWebApi.Middlwares
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-        //private readonly AppSettings _appSettings;
 
         private readonly IConfiguration _configuration;
 
+
         public JwtMiddleware(RequestDelegate next, IConfiguration configuration)
-        //, IOptions<AppSettings> appSettings
         {
             _next = next;
             _configuration = configuration;
-            //_appSettings = appSettings.Value;
         }
 
         public async Task Invoke(HttpContext context, IUserService userService)

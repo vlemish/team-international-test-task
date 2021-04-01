@@ -18,6 +18,7 @@ namespace TeamInternationalTestEf.Models
 
         public virtual ICollection<TextMessage> TextMessages { get; set; }
 
+        public virtual ICollection<ImageMessage> ImageMessages { get; set; }
 
         public User()
         {

@@ -10,6 +10,7 @@ namespace TeamInternationalTestEf.Models
 
         public byte[] Data { get; set; }
 
+
         public FileMessage()
         {
 

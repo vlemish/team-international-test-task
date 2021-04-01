@@ -9,13 +9,9 @@ namespace TeamInternationalTestWebApi.Middlwares
     {
         private readonly RequestDelegate _next;
 
-        //private readonly IRepo<User> _repo;
-
 
         public DbInitialiationMiddleware(RequestDelegate next)
-        //, IRepo<User> repo
         {
-            //_repo = repo;
             _next = next;
         }
 

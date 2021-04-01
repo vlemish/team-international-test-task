@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using TeamInternationalTestEf.Models;
 using TeamInternationalTestEf.Repos;
 using TeamInternationalTestWebApi.DTOs.FileMessageDTOs;
@@ -35,19 +36,9 @@ namespace TeamInternationalTestWebApi.Controllers
         {
             var userId = (HttpContext.Items["User"] as User).Id;
 
-            var files = (_fileRepo as FileMessageRepo).GetAllByUserIdManifest(userId);
-            return Ok(files);
-        }
+            var files = (_fileRepo as FileMessageRepo).GetAllFilesManifestByUserId(userId);
 
-        //GET: api/img-messages/
-        [HttpGet("imgs")]
-        public ActionResult<List<ReadImgMessageDto>> GetAllImgs()
-        {
-            var userId = (HttpContext.Items["User"] as User).Id;
-
-            var files = (_fileRepo as FileMessageRepo).GetAllImgsByUserId(userId);
-
-            var list = _mapper.Map<List<ReadImgMessageDto>>(files);
+            var list = _mapper.Map<IEnumerable<ReadFileMessageDto>>(files);
 
             return Ok(list);
         }
@@ -81,18 +72,16 @@ namespace TeamInternationalTestWebApi.Controllers
             }
 
             var userId = (HttpContext.Items["User"] as User).Id;
-            var createFileMessageDto = new CreateFileMessageDto()
-            {
-                Data = file,
-                UserId = userId
-            };
+            var createFileMessageDto = new CreateFileMessageDto(file, userId);
 
             try
             {
                 var model = _mapper.Map<FileMessage>(createFileMessageDto);
                 _fileRepo.Add(model);
-                var fileMessageReadDto = _mapper.Map<FileMessageManifest>(model);
-                //return CreatedAtRoute(nameof(GetFileById), new { Id = fileMessageReadDto.Id }, fileMessageReadDto);
+
+                //mapping doesn't work
+                //var fileMessageReadDto = _mapper.Map<FileMessageManifest>(model);
+                ////return CreatedAtRoute(nameof(GetFileById), new { Id = fileMessageReadDto.Id }, fileMessageReadDto);
                 return NoContent();
             }
             catch (Exception e)

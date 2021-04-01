@@ -1,21 +1,16 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TeamInternationalTestEf.EF;
 using TeamInternationalTestEf.Models;
 using TeamInternationalTestEf.Repos;
 using TeamInternationalTestWebApi.Middlwares;
+using TeamInternationalTestWebApi.Profiles;
 using TeamInternationalTestWebApi.Services;
 
 namespace TeamInternationalTestWebApi
@@ -35,7 +30,7 @@ namespace TeamInternationalTestWebApi
             services.AddDbContext<TestDbContext>(options =>
             {
                 options.UseLazyLoadingProxies(true).UseSqlServer(Configuration.GetConnectionString("sqlServerConnStr"));
-            });            
+            });
 
             services.AddCors(options =>
             {
@@ -48,16 +43,23 @@ namespace TeamInternationalTestWebApi
                     });
             });
 
-            
-            services.AddControllers().AddNewtonsoftJson();       
+            services.AddControllers().AddNewtonsoftJson();
 
-            //services.AddScoped(typeof(IRepo<User>), typeof(UserRepo));
             services.AddScoped<IRepo<User>, UserRepo>();
             services.AddScoped<IRepo<FileMessage>, FileMessageRepo>();
             services.AddScoped<IRepo<TextMessage>, TextMessageRepo>();
-            services.AddScoped<IUserService, UserService>();            
+            services.AddScoped<IRepo<ImageMessage>, ImageMessageRepo>();
+            services.AddScoped<IUserService, UserService>();
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new FileMessageProfile());
+                mc.AddProfile(new ImageMessageProfile());
+                mc.AddProfile(new TextMessageProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

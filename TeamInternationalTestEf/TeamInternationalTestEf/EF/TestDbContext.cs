@@ -9,6 +9,9 @@ namespace TeamInternationalTestEf.EF
 
         public DbSet<TextMessage> TextMessages { get; set; }
 
+        public DbSet<ImageMessage> ImageMessages { get; set; }
+
+
         public DbSet<User> Users { get; set; }
 
 
@@ -47,6 +50,20 @@ namespace TeamInternationalTestEf.EF
                 e.Property(p => p.UserId).IsRequired();
 
                 e.HasOne(fm => fm.User).WithMany(u => u.FileMessages).OnDelete(DeleteBehavior.Cascade).HasForeignKey(fm => fm.UserId);
+            });
+            builder.Entity<ImageMessage>(e =>
+            {
+                e.ToTable("ImageMessages");
+                e.HasKey(p => p.Id);
+
+                e.Property(p => p.Id).ValueGeneratedOnAdd();
+                e.Property(p => p.Data).IsRequired();
+                e.Property(p => p.Name).HasMaxLength(100).IsRequired();
+                e.Property(p => p.ContentType).HasMaxLength(80).IsRequired(); // has both on ef and on server check constraint, value must be an image!
+                e.Property(p => p.CreationTime).IsRequired();
+                e.Property(p => p.UserId).IsRequired();
+
+                e.HasOne(fm => fm.User).WithMany(u => u.ImageMessages).OnDelete(DeleteBehavior.Cascade).HasForeignKey(fm => fm.UserId);
             });
             builder.Entity<TextMessage>(e =>
             {
