@@ -1,0 +1,36 @@
+<div class="flex-container">
+    <div class="content" (mouseover)="onImgMouseOver()" (mouseout)="onImgMouseOut()">
+        <div class="msg-body">
+            <div [class]="headerClass">
+                <div class="img-name-wrapper">
+                    <div class="flex-container">
+                        <p style="color: white;">{{getFileName()}}</p>
+                    </div>
+                </div>
+                <div class="dropdown-wrapper" (mouseover)="onShowMoreOver()" (mouseout)="onShowMoreOut()">
+                    <div class="flex-container-row-reverse">
+                        <button style="border:none; background: none;">
+                            <fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon>
+                        </button>
+                        <div [class]="dropDownClass">
+                            <button style="border:none; background: none;" (click)="onDeleteClick()">
+                                <fa-icon class="dropdown-el trash-icon" [icon]="trashIcon"></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img [src]='imgUrl'>
+
+            <div [class]="footerClass" (mouseover)="onImgMouseOver()" (mouseout)="onImgMouseOut()">
+                <div class="time-wrapper">
+                    <div class="flex-container">
+                        <p class="p-time">
+                            {{imgMessage.creationTime | date:'h:mm a'}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

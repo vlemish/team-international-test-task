@@ -1,0 +1,98 @@
+.flex-container {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .flex-container-right {
+    float: right;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: right;
+    justify-content: right;
+    flex-direction: row-reverse;
+  }
+  .content{      
+    background-color: white;
+    max-height: 250px;
+    width: 480px;
+    padding-left: 10px;
+    padding-right: 10px;    
+    border-radius: 10px 10px 10px 10px; 
+  }
+  .msg-header{
+    text-align: right;
+    padding: 5px;
+    height: 25px;
+    position: relative;
+  }
+.msg-body{  
+    padding: 5px;
+    margin-top: 10px;
+}
+.dropdown-list{
+    padding-left: 4px;
+}
+.dropdown-el{
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.input-body{
+    width: 100%;
+    max-height: 150px;
+    resize: vertical;
+    padding: 5px;
+}
+.p-body{
+    padding: 10px;
+    /* padding-bottom: 10px; */
+    word-wrap:break-word
+}
+.p-time{
+    padding: 5px;
+    text-align: right;
+    padding-right: 16px;
+}
+.drop-down-icon{
+    font-size: 15px;
+}
+.drop-down-icon:hover{
+    font-size: 17px;
+}
+.trash-icon{
+    color: red;
+    font-size: 15px;
+}
+.trash-icon:hover{
+    color:darkred;
+    font-size: 17px;
+}
+.edit-icon{
+    font-size: 15px;
+    color:gold;
+}
+.edit-icon:hover{
+    font-size: 17px;
+    color: darkgoldenrod;
+}
+
+.btn-size{
+    padding-top:10px;
+    width: 180px;
+}
+
+.hidden{
+    visibility: hidden;
+}
