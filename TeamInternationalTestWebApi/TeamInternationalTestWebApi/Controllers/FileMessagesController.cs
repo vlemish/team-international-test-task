@@ -32,15 +32,22 @@ namespace TeamInternationalTestWebApi.Controllers
         //GET: api/file-messages/
         [Authorize]
         [HttpGet]
-        public ActionResult<List<ReadFileMessageDto>> GetAll()
+        public ActionResult<IEnumerable<ReadFileMessageDto>> GetAll()
         {
-            var userId = (HttpContext.Items["User"] as User).Id;
+            try
+            {
+                var userId = (HttpContext.Items["User"] as User).Id;
 
-            var files = (_fileRepo as FileMessageRepo).GetAllFilesManifestByUserId(userId);
+                var files = (_fileRepo as FileMessageRepo).GetAllFilesManifestByUserId(userId);
 
-            var list = _mapper.Map<IEnumerable<ReadFileMessageDto>>(files);
+                var list = _mapper.Map<IEnumerable<ReadFileMessageDto>>(files);
 
-            return Ok(list);
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         //GET: api/file-messages/1
@@ -48,16 +55,23 @@ namespace TeamInternationalTestWebApi.Controllers
         [HttpGet("{id}", Name = "GetFileById")]
         public ActionResult<ReadFileMessageDto> GetFileById(int id)
         {
-            var userId = (HttpContext.Items["User"] as User).Id;
-
-            var file = _fileRepo.GetOneById(id);
-            if (file == null)
+            try
             {
-                return NotFound();
-            }
+                var userId = (HttpContext.Items["User"] as User).Id;
 
-            var readFileMessageDto = _mapper.Map<ReadFileMessageDto>(file);
-            return Ok(readFileMessageDto);
+                var file = _fileRepo.GetOneById(id);
+                if (file == null)
+                {
+                    return NotFound();
+                }
+
+                var readFileMessageDto = _mapper.Map<ReadFileMessageDto>(file);
+                return Ok(readFileMessageDto);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         //POST: api/file-messages
@@ -65,24 +79,22 @@ namespace TeamInternationalTestWebApi.Controllers
         [HttpPost]
         public IActionResult CreateFile()
         {
-            var file = HttpContext.Request.Form.Files.First();
-            if (file == null)
-            {
-                return BadRequest();
-            }
-
-            var userId = (HttpContext.Items["User"] as User).Id;
-            var createFileMessageDto = new CreateFileMessageDto(file, userId);
-
             try
             {
+                var file = HttpContext.Request.Form.Files.First();
+                if (file == null)
+                {
+                    return BadRequest();
+                }
+
+                var userId = (HttpContext.Items["User"] as User).Id;
+                var createFileMessageDto = new CreateFileMessageDto(file, userId);
+
                 var model = _mapper.Map<FileMessage>(createFileMessageDto);
                 _fileRepo.Add(model);
 
-                //mapping doesn't work
-                //var fileMessageReadDto = _mapper.Map<FileMessageManifest>(model);
-                ////return CreatedAtRoute(nameof(GetFileById), new { Id = fileMessageReadDto.Id }, fileMessageReadDto);
-                return NoContent();
+                var fileMessageReadDto = _mapper.Map<FileMessageManifest>(model);
+                return CreatedAtRoute(nameof(GetFileById), new { Id = fileMessageReadDto.Id }, fileMessageReadDto);
             }
             catch (Exception e)
             {
@@ -93,15 +105,22 @@ namespace TeamInternationalTestWebApi.Controllers
         [HttpGet("download/{id}")]
         public IActionResult Download(int id)
         {
-            var file = _fileRepo.GetOneById(id);
-            if (file == null)
+            try
             {
-                return NotFound();
+                var file = _fileRepo.GetOneById(id);
+                if (file == null)
+                {
+                    return NotFound();
+                }
+
+                MemoryStream memoryStream = new MemoryStream(file.Data);
+
+                return File(memoryStream, file.ContentType, file.Name);
             }
-
-            MemoryStream memoryStream = new MemoryStream(file.Data);
-
-            return File(memoryStream, file.ContentType, file.Name);
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         //DELETE: api/file-messages/1
@@ -109,14 +128,14 @@ namespace TeamInternationalTestWebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteFile(int id)
         {
-            var file = _fileRepo.GetOneById(id);
-            if (file == null)
-            {
-                return NotFound();
-            }
-
             try
             {
+                var file = _fileRepo.GetOneById(id);
+                if (file == null)
+                {
+                    return NotFound();
+                }
+
                 _fileRepo.Remove(file);
                 return NoContent();
             }

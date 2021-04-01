@@ -49,7 +49,6 @@ namespace TeamInternationalTestWebApi.Services
         }
 
         // helper method
-
         private string GenerateJwtToken(User user)
         {
             // generate token that is valid for 7 days
