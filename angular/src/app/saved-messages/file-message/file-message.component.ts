@@ -3,6 +3,7 @@ import { faEllipsisV, faFile, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FileMessage } from 'src/app/models/FileMessage';
 import { FileMessagesService } from 'src/app/services/file-messages.service';
 import * as FileSaver from 'file-saver';
+import { MessagesRepositoryService } from 'src/app/services/messages-repository.service';
 
 @Component({
   selector: 'app-file-message',
@@ -11,20 +12,19 @@ import * as FileSaver from 'file-saver';
 })
 export class FileMessageComponent implements OnInit {
 
-  constructor(private fileService: FileMessagesService) { }
+  constructor(
+    private fileService: FileMessagesService,
+    private filesRepository: MessagesRepositoryService) { }
 
   dropDownIcon = faEllipsisV;
   trashIcon = faTrash;
   fileIcon = faFile;
-
-  img : string = "https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg";
 
   dropDownClass: string = "dropdown-list hidden"
   editabeContentClass: string = "hidden";
   staticContentClass: string = "";
 
   @Input() fileMessage: FileMessage = new FileMessage();
-  @Output() componentUpdated = new EventEmitter();
 
   getFileName() {
     if (this.fileMessage.name.length > 15) {
@@ -46,14 +46,17 @@ export class FileMessageComponent implements OnInit {
       let currentHours = new Date(Date.now()).getHours();
       let creationHours = new Date(this.fileMessage.creationTime).getHours();
       let currentMinutes = new Date(Date.now()).getMinutes();
-      let creationMinutes = new Date(this.fileMessage.creationTime).getMinutes();      
+      let creationMinutes = new Date(this.fileMessage.creationTime).getMinutes();
       let diffHours = currentHours - creationHours;
       let diffMin = currentMinutes - creationMinutes;
       if (diffHours !== 0 || Math.abs(diffMin) >= 15) {
         return true;
       }
+      else {
+        return false;
+      }
     }
-    return false;
+    return true;
   }
 
   onDownloadClick() {
@@ -89,7 +92,7 @@ export class FileMessageComponent implements OnInit {
     if (this.canEdit()) {
       this.fileService.deleteFileMessage(this.fileMessage.id).subscribe(
         () => {
-          this.componentUpdated.emit();
+          this.filesRepository.deleteMessage(this.fileMessage);
         },
         (error) => {
 

@@ -12,15 +12,15 @@
         <div class="msg-el" *ngFor="let file of files" [ngSwitch]="file">
             <div [ngSwitch]="file.type">
                 <div *ngSwitchCase="'text'">
-                    <app-text-message [txtMessage]=castToTextMessage(file) (componentUpdated)="onUpdate()">
+                    <app-text-message [txtMessage]=castToTextMessage(file)>
                     </app-text-message>
                 </div>
                 <div *ngSwitchCase="'file'">
-                    <app-file-message [fileMessage]=castToFileMessage(file) (componentUpdated)="onUpdate()">
+                    <app-file-message [fileMessage]=castToFileMessage(file)>
                     </app-file-message>
                 </div>
                 <div *ngSwitchCase="'img'">
-                    <app-img-message [imgMessage]=castToImgMessage(file) (componentUpdated)="onUpdate()">
+                    <app-img-message [imgMessage]=castToImgMessage(file)>
                     </app-img-message>
                 </div>
             </div>

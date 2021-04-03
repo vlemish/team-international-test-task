@@ -36,8 +36,11 @@ export class FileMessagesService {
 
   addFileMessage(entity: FormData) {
     console.log(entity);
-    return this.http.post(this._url,
-      entity
+    return this.http.post<FileMessage>(this._url, entity).pipe(
+      map(file=>{
+        file.type='file';
+        return file;
+      })     
     );
   }
 

@@ -4,6 +4,7 @@ import { ImageMessage } from 'src/app/models/ImageMessage';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { FileMessagesService } from 'src/app/services/file-messages.service';
 import { ImageMessagesService } from 'src/app/services/image-messages.service';
+import { MessagesRepositoryService } from 'src/app/services/messages-repository.service';
 
 @Component({
   selector: 'app-img-message',
@@ -14,7 +15,8 @@ export class ImgMessageComponent implements OnInit {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private imgService: ImageMessagesService) { }
+    private imgService: ImageMessagesService,
+    private filesRepository: MessagesRepositoryService) { }
 
   dropDownIcon = faEllipsisV;
   trashIcon = faTrash;
@@ -27,7 +29,6 @@ export class ImgMessageComponent implements OnInit {
 
 
   @Input() imgMessage: ImageMessage = new ImageMessage();
-  @Output() componentUpdated = new EventEmitter();
 
   imgUrl: SafeUrl = "";
 
@@ -53,14 +54,17 @@ export class ImgMessageComponent implements OnInit {
       let currentHours = new Date(Date.now()).getHours();
       let creationHours = new Date(this.imgMessage.creationTime).getHours();
       let currentMinutes = new Date(Date.now()).getMinutes();
-      let creationMinutes = new Date(this.imgMessage.creationTime).getMinutes();      
+      let creationMinutes = new Date(this.imgMessage.creationTime).getMinutes();
       let diffHours = currentHours - creationHours;
       let diffMin = currentMinutes - creationMinutes;
       if (diffHours !== 0 || Math.abs(diffMin) >= 15) {
         return true;
       }
+      else {
+        return false;
+      }
     }
-    return false;
+    return true;;
   }
 
   onShowMoreOver() {
@@ -89,7 +93,8 @@ export class ImgMessageComponent implements OnInit {
     if (this.canEdit()) {
       this.imgService.deleteImageMessage(this.imgMessage.id).subscribe(
         () => {
-          this.componentUpdated.emit();
+          // this.componentUpdated.emit();
+          this.filesRepository.deleteMessage(this.imgMessage);
         },
         (error) => {
 

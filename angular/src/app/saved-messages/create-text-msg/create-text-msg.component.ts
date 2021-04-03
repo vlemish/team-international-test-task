@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { MessagesRepositoryService } from 'src/app/services/messages-repository.service';
 import { TextMessagesService } from 'src/app/services/text-messages.service';
 
 @Component({
@@ -8,7 +9,9 @@ import { TextMessagesService } from 'src/app/services/text-messages.service';
 })
 export class CreateTextMsgComponent implements OnInit {
 
-  constructor(private textService: TextMessagesService) { }
+  constructor(
+    private textService: TextMessagesService, 
+    private filesRepository: MessagesRepositoryService) { }
 
   content : string = "";
   @Output() onComponentDone = new EventEmitter<number>();
@@ -20,6 +23,7 @@ export class CreateTextMsgComponent implements OnInit {
   onAddClicked(){     
     this.textService.addTextMessage(this.content).subscribe(
       (data)=>{     
+        this.filesRepository.addMessage(data);
         this.onComponentDone.emit(1);
       },
       (error)=>{

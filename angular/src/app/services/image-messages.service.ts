@@ -31,8 +31,11 @@ export class ImageMessagesService {
 
   addImageMessage(entity: FormData) {
     console.log(entity);
-    return this.http.post(this._url,
-      entity
+    return this.http.post<ImageMessage>(this._url, entity).pipe(
+      map(img=>{
+        img.type='img';
+        return img;
+      })
     );
   }
 
