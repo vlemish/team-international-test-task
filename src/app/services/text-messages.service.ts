@@ -33,7 +33,12 @@ export class TextMessagesService {
     let content = {
       content: entity
     };
-    return this.http.post(this._url, content);
+    return this.http.post<TextMessage>(this._url, content).pipe(
+      map(textMsg=>{
+        textMsg.type='text';
+        return textMsg;
+      })
+    );
   }
 
   updateTextMessage(id: number, entity: string) {

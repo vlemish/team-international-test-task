@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { TextMessage } from 'src/app/models/TextMessage';
+import { MessagesRepositoryService } from 'src/app/services/messages-repository.service';
 import { TextMessagesService } from 'src/app/services/text-messages.service';
 
 @Component({
@@ -10,7 +11,9 @@ import { TextMessagesService } from 'src/app/services/text-messages.service';
 })
 export class TextMessageComponent implements OnInit {
 
-  constructor(private textService: TextMessagesService) { }
+  constructor(
+    private textService: TextMessagesService,
+    private filesRepository: MessagesRepositoryService) { }
 
   dropDownIcon = faEllipsisV;
   trashIcon = faTrash;
@@ -19,8 +22,6 @@ export class TextMessageComponent implements OnInit {
   dropDownClass: string = "dropdown-list hidden"
   editabeContentClass: string = "hidden";
   staticContentClass: string = "";
-
-  @Output() componentUpdated = new EventEmitter();
 
   @Input() txtMessage: TextMessage = new TextMessage();
 
@@ -39,11 +40,14 @@ export class TextMessageComponent implements OnInit {
 
       let diffHours = currentHours - creationHours;
       let diffMin = currentMinutes - creationMinutes;
-      if (diffHours !== 0 && diffMin >= 15) {
+      if (diffHours !== 0 || Math.abs(diffMin) >= 15) {
         return true;
       }
+      else {
+        return false;
+      }
     }
-    return false;
+    return true;
   }
 
   onShowMoreOver() {
@@ -68,7 +72,8 @@ export class TextMessageComponent implements OnInit {
     if (this.canEdit()) {
       this.textService.deleteTextMessage(this.txtMessage.id).subscribe(
         () => {
-          this.componentUpdated.emit();
+          // this.componentUpdated.emit();
+          this.filesRepository.deleteMessage(this.txtMessage);
         },
         (error) => {
 
@@ -84,8 +89,7 @@ export class TextMessageComponent implements OnInit {
     this.staticContentClass = "";
 
     this.textService.updateTextMessage(this.txtMessage.id, this.txtMessage.content).subscribe(
-      (data) => {
-        this.componentUpdated.emit();
+      () => {
       },
       (error) => {
 

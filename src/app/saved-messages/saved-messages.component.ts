@@ -7,19 +7,23 @@ import { TextMessagesService } from '../services/text-messages.service';
 import { IMessage } from '../models/IMessage';
 import { ImageMessage } from '../models/ImageMessage';
 import { ImageMessagesService } from '../services/image-messages.service';
+import { MessagesRepositoryService } from '../services/messages-repository.service';
+import { map, scan } from 'rxjs/operators';
 
 @Component({
   selector: 'app-saved-messages',
   templateUrl: './saved-messages.component.html',
   styleUrls: ['./saved-messages.component.css']
 })
+
 export class SavedMessagesComponent implements OnInit, OnDestroy {
 
   constructor(
     private elementRef: ElementRef,
     private fileService: FileMessagesService,
     private textService: TextMessagesService,
-    private imgService: ImageMessagesService) { }
+    private imgService: ImageMessagesService,
+    private filesRepository: MessagesRepositoryService) { }
 
   messagesCount: number = 0;
 
@@ -38,40 +42,14 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
   fileToUpload: any;
 
   ngOnInit(): void {
-    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'lightgray';   
-    this.loadData();    
+    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'lightgray';
+    this.filesRepository.messages.subscribe((data) => {
+      this.files = data;
+      this.messagesCount = this.files.length;
+    });
   }
   ngOnDestroy(): void {
-    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'white';    
-  }
-
-  onUpdate() {
-    this.loadData();
-  }
-
-  async loadData() {
-    // this.messagesCount = 0;
-    this.files = [];
-    let tempTextMessages = await this.textService.getAllTextMessages();
-    let tempFileMessages = await this.fileService.getAllFileMessages();
-    let tempImgMessages = await this.imgService.getAllImageMessages();
-
-    tempFileMessages.forEach((file) => {
-      //should be a logic to check whether we've already have the file 
-      this.files.push(file);
-    })
-    tempTextMessages.forEach((text) => {
-      //should be a logic to check whether we've already have the text
-      this.files.push(text);
-    })
-    tempImgMessages.forEach((img) => {
-      //should be a logic to check whether we've already have the img
-      this.files.push(img);
-    })
-
-    this.files.sort((a,b)=> <any>new Date(a.creationTime) - <any>new Date(b.creationTime));
-    this.messagesCount = this.files.length;
-
+    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'white';
   }
 
   castToTextMessage(file: IMessage): TextMessage {
@@ -94,9 +72,6 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
   onCreateComponentDone(event: number) {
     this.addMessagesClass = "add-messages";
     this.createTxtMsgClass = "create-txt-msg hidden";
-    if (event > 0) {
-      this.loadData();
-    }
   }
 
   onFileChoose(e: any) {
@@ -104,7 +79,7 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
     this.addFile();
   }
 
-  onImageChoose(e: any){
+  onImageChoose(e: any) {
     this.fileToUpload = e.target.files[0];
     this.addImage();
   }
@@ -114,7 +89,8 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
     form.append('file', this.fileToUpload)
     this.fileService.addFileMessage(form).subscribe(
       (file) => {
-        this.loadData();
+        console.log(file);
+        this.filesRepository.addMessage(file);
       },
       (error) => {
 
@@ -122,12 +98,13 @@ export class SavedMessagesComponent implements OnInit, OnDestroy {
     );
   }
 
-  addImage(){
+  addImage() {
     let form = new FormData();
     form.append('file', this.fileToUpload)
     this.imgService.addImageMessage(form).subscribe(
-      (file) => {
-        this.loadData();
+      (image) => {
+        console.log(image);
+        this.filesRepository.addMessage(image);
       },
       (error) => {
 
